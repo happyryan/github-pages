@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="happyryan">
+  
+  
+  <title>Selenium WebDriver QA | 虫虫研究室</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="UI自动化,UI自动化,面试,">
+  
+
+  
+  <meta name="description" content="Selenium WebDriver常见面试题">
+
+  
+
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":false,"count":false},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-07",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "happyryan",
+    share: {"twitter":false,"facebook":false,"weibo":false,"qq":false,"wechat":false},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">虫虫研究室</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 记录与分享</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-04-18
+    </span>
+    
+      <span>
+        | <a href="/categories/UI自动化/"><i class="fa fa-bookmark"></i>UI自动化</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    Selenium WebDriver QA
+  </h1>
+  
+  <article class="passage-article">
+    <h3 id="一、selenium中如何判断元素是否存在？"><a href="#一、selenium中如何判断元素是否存在？" class="headerlink" title="一、selenium中如何判断元素是否存在？"></a><strong>一、selenium中如何判断元素是否存在？</strong></h3><p>expected_conditions模块提供了多种校验方式，我常用的一种是presence_of_element_located（判断某个元素是否被加到了dom树里，并不代表该元素一定可见，如果定位到就返回WebElement）。如果有需要的话，我还可以自定义expected_conditions方法。</p>
+<h3 id="二、selenium中hidden或者是display-＝-none的元素是否可以定位到？"><a href="#二、selenium中hidden或者是display-＝-none的元素是否可以定位到？" class="headerlink" title="二、selenium中hidden或者是display ＝ none的元素是否可以定位到？"></a><strong>二、selenium中hidden或者是display ＝ none的元素是否可以定位到？</strong></h3><p>可以定位到，但是不能操作，为了显示我们会的更多，我们可以说通过is_displayed()方法来判断显示或不显示，如果想点击的话，可以用js去掉dispalay=none的属性。</p>
+<h3 id="三、selenium中如何保证操作元素的成功率？也就是说如何保证我点击的元素一定是可以点击的？"><a href="#三、selenium中如何保证操作元素的成功率？也就是说如何保证我点击的元素一定是可以点击的？" class="headerlink" title="三、selenium中如何保证操作元素的成功率？也就是说如何保证我点击的元素一定是可以点击的？"></a><strong>三、selenium中如何保证操作元素的成功率？也就是说如何保证我点击的元素一定是可以点击的？</strong></h3><p>通过wait模块中的WebDriverWait类提供的until或until_not方法与expected_conditions结合使用，进行二次封装。</p>
+<h3 id="四、如何提高selenium脚本的执行速度？"><a href="#四、如何提高selenium脚本的执行速度？" class="headerlink" title="四、如何提高selenium脚本的执行速度？"></a><strong>四、如何提高selenium脚本的执行速度？</strong></h3><p>1.少用sleep，尽量不用implicitly_wait</p>
+<p>2.多用显式等待方法</p>
+<h3 id="五、用例在运行过程中经常会出现不稳定的情况，也就是说这次可以通过，下次就没办法通过了，如何去提升用例的稳定性？"><a href="#五、用例在运行过程中经常会出现不稳定的情况，也就是说这次可以通过，下次就没办法通过了，如何去提升用例的稳定性？" class="headerlink" title="五、用例在运行过程中经常会出现不稳定的情况，也就是说这次可以通过，下次就没办法通过了，如何去提升用例的稳定性？"></a><strong>五、用例在运行过程中经常会出现不稳定的情况，也就是说这次可以通过，下次就没办法通过了，如何去提升用例的稳定性？</strong></h3><p>通过wait模块中的WebDriverWait类提供的until或until_not方法与expected_conditions结合使用，进行二次封装。</p>
+<h3 id="六、自动化测试的时候是不是需要连接数据库做数据校验？"><a href="#六、自动化测试的时候是不是需要连接数据库做数据校验？" class="headerlink" title="六、自动化测试的时候是不是需要连接数据库做数据校验？"></a><strong>六、自动化测试的时候是不是需要连接数据库做数据校验？</strong></h3><p>UI自动化不需要、接口测试会需要</p>
+<h3 id="七、id-name-class-xpath-css-selector这些属性，你最偏爱哪一种，为什么？"><a href="#七、id-name-class-xpath-css-selector这些属性，你最偏爱哪一种，为什么？" class="headerlink" title="七、id,name,class,xpath, css selector这些属性，你最偏爱哪一种，为什么？"></a><strong>七、id,name,class,xpath, css selector这些属性，你最偏爱哪一种，为什么？</strong></h3><p>我喜欢用css selector  css语法简洁，定位快（xpath语法长，定位慢，还不稳定）</p>
+<h3 id="八、如何去定位页面上动态加载的元素？"><a href="#八、如何去定位页面上动态加载的元素？" class="headerlink" title="八、如何去定位页面上动态加载的元素？"></a><strong>八、如何去定位页面上动态加载的元素？</strong></h3><p>通过wait模块中的WebDriverWait类提供的until循环的去判断是否出现了要用的元素</p>
+<h3 id="九、如何去定位属性动态变化的元素？"><a href="#九、如何去定位属性动态变化的元素？" class="headerlink" title="九、如何去定位属性动态变化的元素？"></a><strong>九、如何去定位属性动态变化的元素？</strong></h3><p>先去找该元素不变的属性，要是都变，那就找不变的父元素，用层级定位</p>
+<h3 id="十、webdriver-client的原理是什么？"><a href="#十、webdriver-client的原理是什么？" class="headerlink" title="十、webdriver client的原理是什么？"></a><strong>十、webdriver client的原理是什么？</strong></h3><p>当测试脚本启动Chrome的时候，selenium-webdriver 会首先在新线程中启动Chrome浏览器。启动后selenium-webdriver会将Chrome绑定到特定的端口，绑定完成后该<strong>chrome实例</strong>便作为webdriver的<strong>remote server</strong>存在；客户端(也就是测试脚本)创建1个会话，在该session中通过<strong>http请求</strong>向remote server发送请求，remote server解析请求，完成相应操作并返回response；客户端接受response，并分析其返回值以决定是转到第3步还是结束脚本；</p>
+<p><strong>webdriver是按照server – client的经典设计模式设计的。</strong></p>
+<p>server端就是remote server，可以是任意的浏览器。当我们的脚本启动浏览器后，该浏览器就是remote server，它的职责就是等待client（脚本）发送请求并做出相应；</p>
+<p>client端简单说来就是我们的测试代码，我们测试代码中的一些行为，比如打开浏览器，转跳到特定的url等操作是以http请求的方式发送给被测试浏览器，也就是remote server；remote server接受请求，并执行相应操作，并在response中返回执行状态、返回值等信息；</p>
+<h3 id="十一、什么是page-object设计模式？"><a href="#十一、什么是page-object设计模式？" class="headerlink" title="十一、什么是page object设计模式？"></a><strong>十一、什么是page object设计模式？</strong></h3><p>1.把每个页面当成一个页面对象，对页面的可操作功能进行封装</p>
+<p>2.测试case通过调用页面对象的方式来完成case的编写</p>
+<p>3.可以做到UI操作与case编写进行分离</p>
+<h3 id="十二、怎样去选择一个下拉框中的value＝xx的option？"><a href="#十二、怎样去选择一个下拉框中的value＝xx的option？" class="headerlink" title="十二、怎样去选择一个下拉框中的value＝xx的option？"></a><strong>十二、怎样去选择一个下拉框中的value＝xx的option？</strong></h3><p>1、通过两次click可以做到</p>
+<p>2、通过执行js脚本做到（前提是你能写出js代码）</p>
+<p>3、selenium提供了select模块，我们可以通过select模块中的方法定位，比如 index_of、value、text</p>
+<p>4、还可以通过xpath定位，但是有时会出错误</p>
+<h3 id="十三、如何在定位元素后高亮元素"><a href="#十三、如何在定位元素后高亮元素" class="headerlink" title="十三、如何在定位元素后高亮元素"></a><strong>十三、如何在定位元素后高亮元素</strong></h3><p>通过js更改元素属性</p>
+<h3 id="十四、UI自动化最大的缺陷是什么？"><a href="#十四、UI自动化最大的缺陷是什么？" class="headerlink" title="十四、UI自动化最大的缺陷是什么？"></a><strong>十四、UI自动化最大的缺陷是什么？</strong></h3><p>需求变动大的时候，维护成本大</p>
+<h3 id="十五、webdriver可以用来做接口测试吗？"><a href="#十五、webdriver可以用来做接口测试吗？" class="headerlink" title="十五、webdriver可以用来做接口测试吗？"></a><strong>十五、webdriver可以用来做接口测试吗？</strong></h3><p>不可以、webdriver是专门做webUI自动化的。</p>
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、selenium中如何判断元素是否存在？"><span class="toc-text">一、selenium中如何判断元素是否存在？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、selenium中hidden或者是display-＝-none的元素是否可以定位到？"><span class="toc-text">二、selenium中hidden或者是display ＝ none的元素是否可以定位到？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、selenium中如何保证操作元素的成功率？也就是说如何保证我点击的元素一定是可以点击的？"><span class="toc-text">三、selenium中如何保证操作元素的成功率？也就是说如何保证我点击的元素一定是可以点击的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四、如何提高selenium脚本的执行速度？"><span class="toc-text">四、如何提高selenium脚本的执行速度？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五、用例在运行过程中经常会出现不稳定的情况，也就是说这次可以通过，下次就没办法通过了，如何去提升用例的稳定性？"><span class="toc-text">五、用例在运行过程中经常会出现不稳定的情况，也就是说这次可以通过，下次就没办法通过了，如何去提升用例的稳定性？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#六、自动化测试的时候是不是需要连接数据库做数据校验？"><span class="toc-text">六、自动化测试的时候是不是需要连接数据库做数据校验？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#七、id-name-class-xpath-css-selector这些属性，你最偏爱哪一种，为什么？"><span class="toc-text">七、id,name,class,xpath, css selector这些属性，你最偏爱哪一种，为什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#八、如何去定位页面上动态加载的元素？"><span class="toc-text">八、如何去定位页面上动态加载的元素？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#九、如何去定位属性动态变化的元素？"><span class="toc-text">九、如何去定位属性动态变化的元素？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十、webdriver-client的原理是什么？"><span class="toc-text">十、webdriver client的原理是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十一、什么是page-object设计模式？"><span class="toc-text">十一、什么是page object设计模式？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十二、怎样去选择一个下拉框中的value＝xx的option？"><span class="toc-text">十二、怎样去选择一个下拉框中的value＝xx的option？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十三、如何在定位元素后高亮元素"><span class="toc-text">十三、如何在定位元素后高亮元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十四、UI自动化最大的缺陷是什么？"><span class="toc-text">十四、UI自动化最大的缺陷是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#十五、webdriver可以用来做接口测试吗？"><span class="toc-text">十五、webdriver可以用来做接口测试吗？</span></a></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: happyryan</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">http://yoursite.com/passages/2019-04-18-WebdriverQA/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/UI自动化/"><i class="fa fa-tags"></i>UI自动化</a>
+     
+      <a href="/tags/面试/"><i class="fa fa-tags"></i>面试</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">博客推荐</h5>
+        
+          <span class="site-footer-item">
+            <a href="http://ruanyifeng.com/" target="_blank">阮一峰的个人网站</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">系列教程</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/passages/2019-03-03-theme-ad-docs-zh/" target="_blank">Theme Art Design 中文文档</a>
+          </span>
+        
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+        
+          <div>
+            <img src="/images/wechat.jpg" alt="WeChat">
+            
+              <p>WeChat</p>
+            
+          </div>
+        
+          <div>
+            <img src="/images/alipay.jpg" alt="AliPay">
+            
+              <p>AliPay</p>
+            
+          </div>
+        
+      </div>
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-04-18-WebdriverBasics/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    <a href="javascript:void(0);" id="site-reward">
+      <i class="fa fa-thumbs-up"></i>
+    </a>
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+  
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>

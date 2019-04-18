@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="happyryan">
+  
+  
+  <title>WebDriver基础 | 虫虫研究室</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="UI自动化,UI自动化,">
+  
+
+  
+  <meta name="description" content="Selenium WebDriver的基础介绍、基本操作">
+
+  
+
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":false,"count":false},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-07",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "happyryan",
+    share: {"twitter":false,"facebook":false,"weibo":false,"qq":false,"wechat":false},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">虫虫研究室</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 记录与分享</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-04-18
+    </span>
+    
+      <span>
+        | <a href="/categories/UI自动化/"><i class="fa fa-bookmark"></i>UI自动化</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    WebDriver基础
+  </h1>
+  
+  <article class="passage-article">
+    <p>[TOC]</p>
+<h2 id="1-初识selenium"><a href="#1-初识selenium" class="headerlink" title="1 初识selenium"></a>1 初识selenium</h2><h3 id="1-1-WebDriver"><a href="#1-1-WebDriver" class="headerlink" title="1.1 WebDriver"></a>1.1 WebDriver</h3><ul>
+<li>WebDriver 2.x</li>
+</ul>
+<p>当Selenium2.x 提出了WebDriver的概念之后，它提供了完全另外的一种方式与浏览器交互是。利用浏览器原生的API，封装成一套更加面向对象的Selenium WebDriver API，直接操作浏览器页面里的元素，甚至操作浏览器本身（截屏，窗口大小，启动，关闭，安装插件，配置证书之类）。由于使用的是浏览器原生的API，速度大大提高，而且调用的稳定性交给了浏览器厂商本身，显然是更加科学。然而带来的一些副作用就是，不同的浏览器厂商，对Web元素的操作和呈现多少会有一些差异，这就直接导致了Selenium WebDriver要分浏览器厂商不同，而提供不同的实现。例如Firefox就有专门的FirefoxDriver，Chrome就有专门的ChromeDriver等等。（甚至包括了AndroidDriver和iOS WebDriver）<br>Selenium3.0发布后，最大更新点就是干掉了对selenium rc（早期的Selenium使用的是JavaScript注入技术与浏览器打交道，需要Selenium RC启动一个Server，将操作Web元素的API调用转化为一段段Javascript，在Selenium内核启动浏览器之后注入这段Javascript。这种方法速度不理想）的支持，这标志着webdriver协议最终一统江湖，rc毕竟是继子，webdriver才是亲儿子，假儿子给真儿子让路，豪门继承权尘埃落定。</p>
+<ul>
+<li>selenium3.0</li>
+</ul>
+<p>webdriver 协议现在已经成为业内公认的浏览器UI测试的标准实现。简而言之，做浏览器ui测试，请认准selenium webdriver商标。各种官方支持意味着以后的浏览器UI测试的速度和稳定性会有较大的提升。selenium 2.0时代只有chrome driver是官方出品，其它实现均是第三方。从稳定性上说，2.0时代最稳定的测试浏览器是chrome和firefox，其它浏览器支持均或多或少有些问题。浏览器UI自动化测试已经成为了行业标配。这也是为什么几乎所有浏览器厂商都推出自己官方driver的原因。</p>
+<ul>
+<li>WebDriver原理</li>
+</ul>
+<p>webdriver是按照server – client的经典设计模式设计的。<br>webdriver的作用就是创建一个新的浏览器实例，也就是启动一个Server端。<br>（Starts the service and then creates new instance of chrome driver）<br>server端就是我们的Remote server，也就是我们通过各个不同浏览器所启动的浏览器实例，在我们脚本启动浏览器后，这个浏览器就可以称之为我们的Remote server，它的职责就是等待client发送请求并做出相应处理。<br>client 就是我们的测试代码，我们测试代码中的所有操作，比如打开浏览器，寻找元素，点击都是以http请求的方式发送给被测试浏览器，也就是我们的Remote server，remote server接受请求，并执行相应操作，并在response中返回执行状态、返回值等信息(这里调用的接口是浏览器的源生API，而每一个浏览器都有自己的一套接口信息，这也就是为什么我们要安装不同的驱动的原因)</p>
+<ul>
+<li>WebDriver工作流程</li>
+</ul>
+<ol>
+<li>通过WebDriver创建一个浏览器服务，remote server。</li>
+<li>脚本启动时会在新的线程中启动一个浏览器，并绑定特定的端口，没个浏览器有不同的端口段。</li>
+<li>client 创建1个session，在该session中通过http请求向remote server发送restful的请求，remote server解析请求，完成相应操作并返回response。</li>
+<li>分析response，继续执行脚本还是结束执行</li>
+</ol>
+<h3 id="1-2-启动chrome"><a href="#1-2-启动chrome" class="headerlink" title="1.2 启动chrome"></a>1.2 启动chrome</h3><p>通过webdriver.chrome 创建浏览器，当做我们的服务端， 会和客户端进行ip端口绑定<br>我们的代码就是客户端<br>基于http协议发送 post请求</p>
+<p>另外，pip install selenium第三方包装在python的sit packages中，可以进入目录查看selenium源码：</p>
+<ul>
+<li>command.py<br>Command类中定义了WebDriver的一些常用的常量。</li>
+<li>remote\webdrvier.py<br>所有浏览器webdrvier的基类，其中包含了所有webdriver的api接口</li>
+<li>remote\remote_connection.py<br>包含启动Remote WebDrvier server，执行client请求，self._commands是selenium的核心请求参数，根据对应的Command常量，发送不同的http请求。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line"># 启动一个浏览器 浏览器就是我们的服务端</span><br><span class="line"># executable_path后面跟的是驱动，一般驱动目录配置在环境变量中，无需指定</span><br><span class="line">driver = webdriver.Chrome(executable_path=&apos;/usr/local/opt/drivers/chromedriver&apos;)</span><br><span class="line"># 这里的url 必须带有http</span><br><span class="line">driver.get(&apos;http://ui.imdsx.cn/uitester/&apos;)</span><br></pre></td></tr></table></figure>
+<h2 id="2-xpath与CSS-selector"><a href="#2-xpath与CSS-selector" class="headerlink" title="2 xpath与CSS selector"></a>2 xpath与CSS selector</h2><p>定位元素时，首先要观察html， 查看html的结构以及定位的元素有没有什么可以利用的属性</p>
+<h3 id="xpath"><a href="#xpath" class="headerlink" title="xpath"></a>xpath</h3><p>firefox可使用try xpath插件、 chrome可使用ChroPath插件来进行定位</p>
+<ul>
+<li>try xpath设置：Way选择XPath ANY_TYPE， 在Expression中查找</li>
+<li>ChroPath设置：使用selectors查找<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//* 取当前页面的全部元素</span><br><span class="line"></span><br><span class="line">//*[@id=&apos;i1&apos;] 使用属性id进行定位， @代表引用属性</span><br><span class="line">//*[@placeholder=&quot;请通过ID定位元素&quot;] 同上，使用属性placeholder进行定位</span><br><span class="line"></span><br><span class="line">//input[@placeholder=&quot;请通过ID定位元素&quot;] 通过“标签名”进一步缩小范围</span><br><span class="line"></span><br><span class="line">//select[4] 如果存在不唯一的情况，可以通过角标进行取值 xpath从1开始取</span><br><span class="line"></span><br><span class="line">//select[@size=&quot;4&quot; and @multiple=&quot;multiple&quot;]  逻辑定位</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>当然，也可以在chrome f12→console中输入以下内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$x(&apos;//input[@placeholder=&quot;请通过ID定位元素&quot;]&apos;)</span><br></pre></td></tr></table></figure></p>
+<p>xpath支持层级过滤， 但定位尽量少用层级定位，如果开发更改了页面的层级，所有定位都挂了，尽量属性定位为主，层级为辅助<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">支持通过 / 进行层级递进，找到符合层级关系的标签</span><br><span class="line">//form/div/input[@placeholder=&quot;用户名&quot;]</span><br><span class="line"> </span><br><span class="line">当层级都重复时，可以通过单个层级的属性进行定位</span><br><span class="line">//form/div[@class=&apos;login-user&apos;]/input</span><br></pre></td></tr></table></figure></p>
+<h3 id="css-selector"><a href="#css-selector" class="headerlink" title="css selector"></a>css selector</h3><p>和xpath一样，firefox可使用try xpath插件、 chrome可使用ChroPath插件来进行定位</p>
+<ul>
+<li>try xpath设置：Way选择QuerySelectorAll， 在Expression中查找</li>
+<li>ChroPath设置：使用CSS selector查找<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#i1 &quot;#&quot; 代表id，id唯一，推荐</span><br><span class="line"></span><br><span class="line">.driver &quot;.&quot; 代表class 不是说不能用class 如果class属性在页面中唯一，那么是可以等同于id来使用</span><br><span class="line"></span><br><span class="line">[placeholder=&quot;请通过ID定位元素&quot;]  属性定位</span><br><span class="line"></span><br><span class="line">input[placeholder=&quot;请通过ID定位元素&quot;] 缩小范围 先定位input 在定位属性</span><br><span class="line"></span><br><span class="line">select[size=&quot;4&quot;][multiple=&quot;multiple&quot;] 多属性确立唯一，不支持角标</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>另外，与CSS相同，支持标签选择器，但并没有什么用，一个页面重复的标签太多了。定位方式 ：直接输入标签名称<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">当与ID、Class 组合使用时书写方式更为简单</span><br><span class="line">Class</span><br><span class="line">input.c1</span><br><span class="line"> </span><br><span class="line">ID </span><br><span class="line">input#i1</span><br></pre></td></tr></table></figure></p>
+<p>也支持层级关系定位<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">与Xpath的不同 Css Selector通过 &gt; 来区分层级的界定</span><br><span class="line">select&gt;option[value=&apos;3&apos;]</span><br></pre></td></tr></table></figure></p>
+<p>还支持模糊匹配<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">^= 匹配元素属性以什么开头 </span><br><span class="line">input[value^=&quot;登&quot;]</span><br><span class="line"> </span><br><span class="line">$= 匹配属性以什么结尾</span><br><span class="line">input[value$=&quot;录&quot;]  </span><br><span class="line"> </span><br><span class="line">*= 匹配属性包含什么值 input</span><br><span class="line">[value*=&quot;录&quot;]</span><br></pre></td></tr></table></figure></p>
+<h3 id="选择xpath还是css-selector"><a href="#选择xpath还是css-selector" class="headerlink" title="选择xpath还是css selector?"></a>选择xpath还是css selector?</h3><p>什么时候用css selector 什么时候用xpath？<br>css selector是基于html进行的定位，效率高，书写也简洁；而xpath中间需要转换。<br>但是由于css selector没有角标定位方式，如果定位的元素无法根据属性确立唯一，只能通过xpath进行角标定位.。</p>
+<h2 id="3-十八种定位方法"><a href="#3-十八种定位方法" class="headerlink" title="3 十八种定位方法"></a>3 十八种定位方法</h2><h3 id="3-1-八种单数定位方式"><a href="#3-1-八种单数定位方式" class="headerlink" title="3.1 八种单数定位方式"></a>3.1 八种单数定位方式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">driver = webdriver.Chrome()</span><br><span class="line">driver.get(&apos;http://ui.imdsx.cn/uitester/&apos;)</span><br><span class="line">js = &apos;window.scrollTo(0,0);&apos; # 讲滚动条调制最上方</span><br><span class="line">driver.execute_script(js)# 执行写好的js</span><br><span class="line">time.sleep(2)</span><br><span class="line"># id进行定位</span><br><span class="line">driver.find_element_by_id(&apos;i1&apos;).send_keys(&apos;12345&apos;) #sendkeys向文本框输入文字</span><br><span class="line"># class定位方式</span><br><span class="line">driver.find_element_by_class_name(&apos;classname&apos;).send_keys(&apos;123123&apos;)</span><br><span class="line"># name定位方式</span><br><span class="line">driver.find_element_by_name(&apos;name&apos;).send_keys(&apos;123123&apos;)</span><br><span class="line"># 文案定位</span><br><span class="line">driver.find_element_by_link_text(&apos;新建标签页面&apos;).click()</span><br><span class="line"># 文案包含定位方式</span><br><span class="line">driver.find_element_by_partial_link_text(&apos;新建标签&apos;).click()</span><br><span class="line"># 标签名定位，最不常用的</span><br><span class="line">driver.find_element_by_tag_name(&apos;input&apos;).send_keys(&apos;1111&apos;)</span><br><span class="line"># xpath</span><br><span class="line">driver.find_element_by_xpath(&apos;//*[@id=&quot;i1&quot;]&apos;).send_keys(&apos;2222&apos;)</span><br><span class="line"># css selector</span><br><span class="line">driver.find_element_by_css_selector(&apos;#i1&apos;).send_keys(&apos;2222&apos;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Tips<br>可以在chrome浏览器F12→Console中调试浏览器位置坐标， 将该js运用在selenium中调节滚动条<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">window.scrollTo(0, 0)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="3-2-八种复数定位"><a href="#3-2-八种复数定位" class="headerlink" title="3.2 八种复数定位"></a>3.2 八种复数定位</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">driver = webdriver.Chrome()</span><br><span class="line">driver.get(&apos;http://ui.imdsx.cn/uitester/&apos;)</span><br><span class="line">js = &apos;window.scrollTo(0,0);&apos; # 讲滚动条调制最上方</span><br><span class="line">driver.execute_script(js)# 执行写好的js</span><br><span class="line">time.sleep(2)</span><br><span class="line">#使用方法</span><br><span class="line">element = driver.find_elements_by_id(&apos;i1&apos;)</span><br><span class="line">element[0].send_keys(&apos;输入文本&apos;)</span><br><span class="line"># 定位的元素如果元素下还有子元素，则可以通过元素进行再次定位</span><br><span class="line"># 复数默认返回的都是列表，列表的顺序是按照html从上到下</span><br><span class="line">elements = driver.find_elements_by_class_name(&apos;inner&apos;)</span><br><span class="line">print(elements)</span><br><span class="line">print(len(elements))</span><br><span class="line">inputele = elements[0].find_elements_by_tag_name(&apos;input&apos;)</span><br><span class="line">print(inputele)</span><br><span class="line">inputele[0].send_keys(&apos;2222&apos;)</span><br></pre></td></tr></table></figure>
+<p>打印结果</p>
+<blockquote>
+<p>[&lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-2”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-3”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-4”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-5”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-6”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-7”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-8”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-9”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-10”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-11”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-12”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-13”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-14”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-15”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-16”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-17”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-18”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-19”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-20”)&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-21”)&gt;]</p>
+<p> 20</p>
+<p> [&lt;selenium.webdriver.remote.webelement.WebElement (session=”a8f820e360528a910088992d2b148798”, element=”0.8591120056624526-1”)&gt;]</p>
+</blockquote>
+<p>从打印结果可以看出，复数形式返回的都是一个列表<br>注意，定位的元素下如果还有子元素，则可以通过元素进行再次定位</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#八种复数与八种单数类似</span><br><span class="line">driver.find_elements_by_id()</span><br><span class="line">driver.find_elements_by_css_selector()</span><br><span class="line">driver.find_elements_by_xpath()</span><br><span class="line">driver.find_elements_by_tag_name()</span><br><span class="line">driver.find_elements_by_link_text()</span><br><span class="line">driver.find_elements_by_partial_link_text()</span><br><span class="line">driver.find_elements_by_class_name()</span><br><span class="line">driver.find_elements_by_name()</span><br></pre></td></tr></table></figure>
+<h3 id="3-3-另外两种定位方式"><a href="#3-3-另外两种定位方式" class="headerlink" title="3.3 另外两种定位方式"></a>3.3 另外两种定位方式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">driver.find_element()</span><br><span class="line">driver.find_elements()</span><br></pre></td></tr></table></figure>
+<p>比如：<strong>driver.find_element(‘id’, ‘i1’)</strong> 等同于 <strong>driver.find_element_by_id(‘i1’)</strong></p>
+<h2 id="4-selunium常用api"><a href="#4-selunium常用api" class="headerlink" title="4 selunium常用api"></a>4 selunium常用api</h2><h3 id="4-1-浏览器操作"><a href="#4-1-浏览器操作" class="headerlink" title="4.1 浏览器操作"></a>4.1 浏览器操作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">driver = webdriver.Chrome()</span><br><span class="line">driver.get(&apos;http:/xxx.xx&apos;)</span><br><span class="line"></span><br><span class="line"># 获取浏览器的大小</span><br><span class="line">size = driver.get_window_size()</span><br><span class="line">print(size)</span><br><span class="line"></span><br><span class="line"># 设置浏览器的大小</span><br><span class="line">driver.set_window_size(200,200)</span><br><span class="line"></span><br><span class="line"># 浏览器最大化</span><br><span class="line">driver.maximize_window()</span><br><span class="line"></span><br><span class="line"># 截图</span><br><span class="line">driver.get_screenshot_as_file(&apos;aa.png&apos;)</span><br><span class="line"></span><br><span class="line">#两种退出方式</span><br><span class="line">driver.close() # 关闭的是当前页面（当开启多个时，关闭当前页面）</span><br><span class="line">driver.quit() # 退出的是驱动（退出并关闭所有页面驱动）</span><br><span class="line"></span><br><span class="line">js = &apos;window.scrollTo(0,0);&apos; # 讲滚动条调制最上方</span><br><span class="line">driver.execute_script(js)# 执行写好的js</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import time</span><br><span class="line">driver.find_element_by_css_selector(&apos;#i1&apos;).send_keys(&apos;123123&apos;)</span><br><span class="line">time.sleep(1)</span><br><span class="line">#清空</span><br><span class="line">driver.find_element_by_css_selector(&apos;#i1&apos;).clear() </span><br><span class="line"></span><br><span class="line">#勾选的checkbox</span><br><span class="line">on= driver.find_element_by_css_selector(&apos;#on&apos;)</span><br><span class="line">#未勾选的checkbox</span><br><span class="line">off= driver.find_element_by_css_selector(&apos;#off&apos;)</span><br><span class="line"></span><br><span class="line">print(on.is_selected()) #返回布尔型</span><br><span class="line">print(off.is_selected()) #返回布尔型</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 浏览器级别的操作</span><br><span class="line">driver.refresh() #刷新</span><br><span class="line"></span><br><span class="line">driver.find_element_by_css_selector(&apos;[href=&quot;http://www.imdsx.cn&quot;]&apos;).click()</span><br><span class="line">import time</span><br><span class="line">time.sleep(3)</span><br><span class="line">driver.back()#后退</span><br><span class="line">time.sleep(3)</span><br><span class="line">driver.forward()#前进</span><br></pre></td></tr></table></figure>
+<p>其他<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 返回页面源码</span><br><span class="line">driver.page_source</span><br><span class="line"> </span><br><span class="line"># 返回tag标题</span><br><span class="line">driver.title</span><br><span class="line"> </span><br><span class="line"># 返回当前Url</span><br><span class="line">driver.current_url</span><br><span class="line"> </span><br><span class="line"># 获取浏览器名称 如：chrome</span><br><span class="line">driver.name</span><br></pre></td></tr></table></figure></p>
+<p>ElementApi<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"># 根据标签属性名称,获取属性value</span><br><span class="line">element.get_attribute(&apos;style&apos;)</span><br><span class="line"> </span><br><span class="line"># 向输入框输入字符串 如果input的type为file类型 可以输入文件绝对路径上传文件</span><br><span class="line">element.send_keys()</span><br><span class="line"> </span><br><span class="line"># 清除文本内容</span><br><span class="line">element.clear()</span><br><span class="line"> </span><br><span class="line"># 鼠标左键点击操作</span><br><span class="line">element.click()</span><br><span class="line"> </span><br><span class="line"># 通过属性名称获取属性</span><br><span class="line">element.get_property(&apos;id&apos;)</span><br><span class="line"> </span><br><span class="line"># 返回元素是否可见 True or False</span><br><span class="line">element.is_displayed()</span><br><span class="line"> </span><br><span class="line"># 返回元素是否被选中 True or False</span><br><span class="line">element.is_selected()</span><br><span class="line"> </span><br><span class="line"># 返回标签元素的名字</span><br><span class="line">element.tag_name</span><br><span class="line"> </span><br><span class="line"># 获取当前标签的宽和高</span><br><span class="line">element.size</span><br><span class="line"> </span><br><span class="line"># 获取元素的文本内容</span><br><span class="line">element.text</span><br><span class="line"> </span><br><span class="line"># 模仿回车按钮 提交数据</span><br><span class="line">element.submit()</span><br><span class="line"> </span><br><span class="line"># 获取当前元素的坐标</span><br><span class="line">element.location</span><br><span class="line"> </span><br><span class="line"># 截取图片</span><br><span class="line">element.screenshot()</span><br></pre></td></tr></table></figure></p>
+<p>常见异常</p>
+<blockquote>
+<p>NoSuchElementException：没有找到元素</p>
+</blockquote>
+<blockquote>
+<p>NoSuchFrameException：没有找到iframe</p>
+</blockquote>
+<blockquote>
+<p>NoSuchWindowException:没找到窗口句柄handle</p>
+</blockquote>
+<blockquote>
+<p>NoSuchAttributeException:属性错误</p>
+</blockquote>
+<blockquote>
+<p>NoAlertPresentException：没找到alert弹出框</p>
+</blockquote>
+<blockquote>
+<p>ElmentNotVisibleException：元素不可见</p>
+</blockquote>
+<blockquote>
+<p>ElementNotSelectableException：元素没有被选中</p>
+</blockquote>
+<blockquote>
+<p>TimeoutException：查找元素超时</p>
+</blockquote>
+<h3 id="4-2-tag指针"><a href="#4-2-tag指针" class="headerlink" title="4.2 tag指针"></a>4.2 tag指针</h3><p>需要用到Selenium单独提供的模块switch_to模块</p>
+<p>其实webdriver在以前的版本中已经为我们封装好了切换Windows、Alert、Iframe，现在依然可以使用，但是会被打上横线，代表他已经过时了，建议使用SwitchTo类来进行操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">driver = webdriver.Chrome()</span><br><span class="line">driver.get(&apos;http://xxxxxxxx/uitester/&apos;)</span><br><span class="line"></span><br><span class="line">driver.find_element_by_link_text(&apos;新建标签页面&apos;).click()</span><br><span class="line">print(driver.window_handles) #获取当前浏览器所打开的全部tag标识</span><br><span class="line">print(driver.current_window_handle) #获取当前浏览器的当前tag标识</span><br><span class="line"></span><br><span class="line">driver.close() #关闭的是driver.current_window_handle对应的页面</span><br><span class="line"></span><br><span class="line">import time</span><br><span class="line">time.sleep(2)</span><br><span class="line"></span><br><span class="line">#下面是切换tag</span><br><span class="line">handles = driver.window_handles[-1]</span><br><span class="line">#如果函数被划横线，代表你的函数比较老，已经不推荐使用，提供了更加方便的用法</span><br><span class="line">driver.switch_to_window(handles) #方法一</span><br><span class="line">#推荐的切换tag的方法</span><br><span class="line">from selenium.webdriver.remote.switch_to import SwitchTo</span><br><span class="line">driver.switch_to.window(handles) #方法二</span><br><span class="line">SwitchTo(driver).window(handles) #方法三</span><br><span class="line"></span><br><span class="line">print(driver.current_window_handle)</span><br><span class="line">driver.close() #关闭当前tag</span><br></pre></td></tr></table></figure>
+<h3 id="4-3-iframe"><a href="#4-3-iframe" class="headerlink" title="4.3 iframe"></a>4.3 iframe</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">driver = webdriver.Chrome()</span><br><span class="line">driver.get(&apos;http://xxxxxxxx/uitester/&apos;)</span><br><span class="line"></span><br><span class="line">#iframe必须一层一层进入</span><br><span class="line">driver.switch_to.frame(&apos;top-frame&apos;)</span><br><span class="line">driver.find_element_by_css_selector(&apos;#newtag&apos;).send_keys(&apos;12312&apos;)</span><br><span class="line"></span><br><span class="line">driver.switch_to.frame(&apos;baidu-frame&apos;)</span><br><span class="line">driver.find_element_by_css_selector(&apos;#kw&apos;).send_keys(&apos;besttest&apos;)</span><br><span class="line"></span><br><span class="line"># 返回上一层</span><br><span class="line">driver.switch_to.parent_frame()</span><br><span class="line">driver.find_element_by_css_selector(&apos;#newtag&apos;).clear()</span><br><span class="line"></span><br><span class="line"># 直接返回默认层</span><br><span class="line">driver.switch_to.default_content()</span><br><span class="line">driver.find_element_by_css_selector(&apos;#i1&apos;).send_keys(&apos;123123&apos;)</span><br></pre></td></tr></table></figure>
+<h3 id="4-4-alert"><a href="#4-4-alert" class="headerlink" title="4.4 alert"></a>4.4 alert</h3><p>导入alert模块：</p>
+<ul>
+<li>from selenium.webdriver.common.alert import Alert</li>
+<li>也可以通过Webdriver的switch_to来调用</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">driver = webdriver.Chrome()</span><br><span class="line">driver.get(&apos;http://xxxx/uitester/&apos;)</span><br><span class="line"></span><br><span class="line"># 处理alert</span><br><span class="line">driver.find_element_by_css_selector(&apos;#alert&apos;).click()</span><br><span class="line"># 点击确认</span><br><span class="line">driver.switch_to.alert.accept()</span><br><span class="line"></span><br><span class="line">driver.find_element_by_css_selector(&apos;#confirm&apos;).click()</span><br><span class="line"># 取消按钮</span><br><span class="line">driver.switch_to.alert.dismiss()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 不常用</span><br><span class="line"># 如果alert上有文本框时，可以输入文字。（注: 没遇到过）</span><br><span class="line">driver.switch_to.alert.send_keys()</span><br><span class="line"> </span><br><span class="line"># 返回Alert上面的文本内容</span><br><span class="line">text = driver.switch_to.alert.text</span><br></pre></td></tr></table></figure>
+<h3 id="4-5-select"><a href="#4-5-select" class="headerlink" title="4.5 select"></a>4.5 select</h3><p>下拉框如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;select name=&quot;city&quot;&gt;</span><br><span class="line">               &lt;option value=&quot;1&quot;&gt;黑龙江&lt;/option&gt;</span><br><span class="line">               &lt;option value=&quot;2&quot; selected=&quot;selected&quot;&gt;辽宁&lt;/option&gt;</span><br><span class="line">               &lt;option value=&quot;3&quot;&gt;北京&lt;/option&gt;</span><br><span class="line">               &lt;option value=&quot;4&quot;&gt;四川&lt;/option&gt;</span><br><span class="line">   &lt;/select&gt;</span><br></pre></td></tr></table></figure></p>
+<p>select模块只支持HTML页面是通过select标签生成的。实际源码中也有写到，Select类在实例化时接收获取到的select元素对象，在初始化时就通过tag_name判断了是否是select标签。如果不是则实例化直接失败。</p>
+<p>我们以select_by_value为例，分析select模块实现原理。<br>分析select的源码还是需要有一定的知识储备量的，比如HTML基础知识和Css Selector定位的写法格式。<br>普通的下拉框由两个标签组成，select标签与option标签，我们可以将select标签理解为下拉框的架子，option是里面每个参数，其中value则为option标签的一种属性。<br>了解了上面的html基础知识后，在看源码实际就很简单了，在实例化Select类后，通过再次获取Select对象中符合要求的option（这里通过css selector的定位方式，根据option的value属性定位我们需要的那个元素），循环处理获取到的option，通过is_selected方法判断是否被选中，如果没有选中则再次点击下。就完成了目标select元素的选中操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">driver = webdriver.Chrome()</span><br><span class="line">driver.get(&apos;http://xxxx/html/&apos;)</span><br><span class="line">js = &apos;window.scrollTo(0,1800);&apos; # 将滚动条调到select出现的位置</span><br><span class="line">driver.execute_script(js)# 执行写好的js</span><br><span class="line"></span><br><span class="line">sele = driver.find_element_by_xpath(&apos;//select[1]&apos;)</span><br><span class="line">from selenium.webdriver.support.select import Select</span><br><span class="line"></span><br><span class="line"># select模块只支持 select元素</span><br><span class="line">Select(sele).select_by_value(&apos;4&apos;)</span><br><span class="line"></span><br><span class="line"># by index 是从0 开始查</span><br><span class="line">Select(sele).select_by_index(2)</span><br></pre></td></tr></table></figure></p>
+<p>下面几种不常用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># 通过选项的文本内容来定位</span><br><span class="line">Select(s).select_by_visible_text(&apos;牡丹江&apos;)</span><br><span class="line"> </span><br><span class="line"># 返回第一个选中的optionElement对象</span><br><span class="line">Select(s).first_selected_option</span><br><span class="line"> </span><br><span class="line"># 返回所有选中的optionElement对象</span><br><span class="line">Select(s).all_selected_options</span><br><span class="line"> </span><br><span class="line"># 取消所有选中的option</span><br><span class="line">Select(s).deselect_all()</span><br><span class="line"> </span><br><span class="line"># 通过option的index来取消对应的option</span><br><span class="line">Select(s).deselect_by_index(1)</span><br><span class="line"> </span><br><span class="line"># 通过value属性，来取消对应option</span><br><span class="line">Select(s).deselect_by_value(&apos;&apos;)</span><br><span class="line"> </span><br><span class="line"># 通过option的文本内容，取消对应的option</span><br><span class="line">Select(s).deselect_by_visible_text(&apos;&apos;)</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-6-鼠标悬浮"><a href="#4-6-鼠标悬浮" class="headerlink" title="4.6 鼠标悬浮"></a>4.6 鼠标悬浮</h3><p>有时候，点击按钮是隐藏的，当我们鼠标悬浮在指定位置后，才会将点击按钮的display属性（css中隐藏属性）通过js操作删除掉，当鼠标移出指定位置后，js又会对其增加display属性。<br>这时如果你直接获取点击按钮的元素操作，一定是获取不到的，虽然说点击按钮确实存在于DOM树中，但是这个元素是不可见的。Selenium会报selenium.common.exceptions.ElementNotVisibleException: Message: element not visible。（元素不可见异常。）<br>当然我们也是可以通过Selenium提供的is_displayed来判断元素是否可见，就可以避免报错出现。</p>
+<p>ActionChains这个模块的实现的核心思想就是，当你调用ActionChains的方法时，不会立即执行，而是会将所有的操作按顺序存放在一个List里，当你调用perform()方法时，队列中的时间会依次执行，这样就实现了连贯的操作。（注：推荐一个尺子工具，MeasulerIt）</p>
+<ul>
+<li>click<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 单击事件,可接受elementObj</span><br><span class="line">ActionChains(driver).click()</span><br><span class="line"> </span><br><span class="line"># 双击事件,可接受elementObj</span><br><span class="line">ActionChains(driver).double_click()</span><br><span class="line"> </span><br><span class="line"># 点击鼠标右键</span><br><span class="line">ActionChains(driver).context_click()</span><br><span class="line"> </span><br><span class="line"># 点击某个元素不松开,接收elementObj</span><br><span class="line">ActionChains(driver).click_and_hold()</span><br><span class="line"> </span><br><span class="line"># # 某个元素上松开鼠标左键,接收elementObj</span><br><span class="line">ActionChains(driver).release()</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>使用如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">driver = webdriver.Chrome()</span><br><span class="line">driver.get(&apos;xxxxxxxxx/uitester/&apos;)</span><br><span class="line">js = &apos;window.scrollTo(0,0);&apos;</span><br><span class="line">driver.execute_script(js)</span><br><span class="line"></span><br><span class="line">element = driver.find_element_by_css_selector(&apos;#dis1&apos;)</span><br><span class="line"></span><br><span class="line">print(element.is_displayed())#  判断元素是否可见，可见返回true  不可见返回false</span><br><span class="line">element.click()#element not interactable</span><br><span class="line"></span><br><span class="line">from selenium.webdriver.common.action_chains import ActionChains</span><br><span class="line"></span><br><span class="line"># 先定位到鼠标要悬浮的那个元素</span><br><span class="line">a = driver.find_element_by_css_selector(&apos;#a&apos;)</span><br><span class="line">dis1 = driver.find_element_by_css_selector(&apos;#dis1&apos;)</span><br><span class="line"># 然后通过鼠标操作，移动到这个元素上，在进行点击</span><br><span class="line">ActionChains(driver).move_to_element(a).click(dis1).perform()</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-7-拖拽"><a href="#4-7-拖拽" class="headerlink" title="4.7 拖拽"></a>4.7 拖拽</h3><ul>
+<li><p>drag_and_drop</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 将source元素拖放至target元素处，参数为两个elementObj</span><br><span class="line">ActionChains(driver).drag_and_drop(source=source,target=target)</span><br><span class="line"> </span><br><span class="line"># 将一个source元素 拖动到针对source坐上角坐在的x y处 可存在负宽度的情况和负高度的情况</span><br><span class="line">ActionChains(driver).drag_and_drop_by_offset(source, x, y)</span><br><span class="line"> </span><br><span class="line"># 这种也是拖拽的一种方式，都是以源元素的左上角为基准，移动坐标</span><br><span class="line">ActionChains(driver).click_and_hold(dom).move_by_offset(169,188).release().perform()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>move_to_element</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 鼠标移动到某一个元素上,结束elementObj</span><br><span class="line">ActionChains(driver).move_to_element(e)</span><br><span class="line"> </span><br><span class="line"># 鼠标移动到制定的坐标上，参数接受x，y</span><br><span class="line">ActionChains(driver).move_by_offset(e[&apos;x&apos;],e[&apos;y&apos;])</span><br><span class="line"> </span><br><span class="line">例：</span><br><span class="line">driver = webdriver.Chrome()</span><br><span class="line">driver.maximize_window()</span><br><span class="line">driver.get(&apos;http://ui.imdsx.cn/uitester/&apos;)</span><br><span class="line">time.sleep(2)</span><br><span class="line">driver.execute_script(&apos;document.body.scrollTop=0&apos;)</span><br><span class="line">time.sleep(1)</span><br><span class="line">a = driver.find_element_by_id(&apos;a&apos;).location</span><br><span class="line">dis = driver.find_element_by_id(&apos;dis1&apos;)</span><br><span class="line">ActionChains(driver).move_by_offset(a[&apos;x&apos;],a[&apos;y&apos;]).double_click(dis).perform()</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>使用如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">driver = webdriver.Chrome(executable_path=&apos;/usr/local/opt/drivers/chromedriver&apos;)</span><br><span class="line">driver.get(&apos;http://ui.xxxx.cn/move/&apos;)</span><br><span class="line"></span><br><span class="line">s = driver.find_element_by_css_selector(&apos;#dragger&apos;) #起始元素</span><br><span class="line">s1 = driver.find_element_by_css_selector(&apos;#dragger1&apos;) #起始元素</span><br><span class="line">s2 = driver.find_element_by_css_selector(&apos;#dragger2&apos;) #起始元素</span><br><span class="line">s3 = driver.find_element_by_css_selector(&apos;#dragger3&apos;) #起始元素</span><br><span class="line">t1 = driver.find_element_by_css_selector(&apos;#i1&apos;) #目标元素</span><br><span class="line">t2 = driver.find_element_by_css_selector(&apos;#i2&apos;) #目标元素</span><br><span class="line">t3 = driver.find_element_by_css_selector(&apos;#i3&apos;) #目标元素</span><br><span class="line">t4 = driver.find_element_by_css_selector(&apos;#i4&apos;) #目标元素</span><br><span class="line"></span><br><span class="line">from selenium.webdriver.common.action_chains import ActionChains</span><br><span class="line">ActionChains(driver).drag_and_drop(s,t1).drag_and_drop(s1,t2).drag_and_drop(s2,t3).drag_and_drop(s3,t4).perform()</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-8-三种等待方式"><a href="#4-8-三种等待方式" class="headerlink" title="4.8 三种等待方式"></a>4.8 三种等待方式</h3><ul>
+<li>固定等待 time.sleep(3)：<br>不建议使用，但是脚本在调试过程时，还是可以使用的，方便快捷</li>
+<li>隐式等待：<br>实际是设置一个最长的等待时间，在设置的时间内网页加载完毕，则进行下一步，否则等到时间结束后才执行下一步。</li>
+<li>显式等待：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from selenium import webdriver</span><br><span class="line">driver = webdriver.Chrome()</span><br><span class="line">driver.get(&apos;http://ui.imdsx.cn/uitester&apos;)</span><br><span class="line">from selenium.webdriver.support.wait import WebDriverWait</span><br><span class="line">from selenium.webdriver.common.by import By</span><br><span class="line">from selenium.webdriver.support import expected_conditions as EC</span><br><span class="line"></span><br><span class="line">ecDemo = EC.presence_of_element_located((By.ID,&apos;i1&apos;))</span><br><span class="line">print(ecDemo) #这是一个函数</span><br><span class="line">element = WebDriverWait(driver,10,1).until(ecDemo) #每隔1秒查一次，10秒超时, 查询id未1的元素</span><br><span class="line">element.send_keys(&apos;121314&apos;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="4-9-ActionChains的其他用法"><a href="#4-9-ActionChains的其他用法" class="headerlink" title="4.9 ActionChains的其他用法"></a>4.9 ActionChains的其他用法</h3><ul>
+<li><p>key_down与key_up<br>有时我们需要模拟键盘操作时，那么就需要用到ActionChains中的key操作了，提供了两个方法，key_down与key_up，模拟按下键盘的某个键子，与松开某个键子，接收的参数是按键的Keys与elementObj。可以与send_keys连用（例：全选、复制、剪切、粘贴）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># key_down 模拟键盘摁下某个按键 key_up 松开某个按键，与sendkey连用完成一些操作，每次down必须up一次否则将出现异常</span><br><span class="line">ActionChains(driver).key_down(Keys.CONTROL,dom).send_keys(&apos;a&apos;).send_keys(&apos;c&apos;).key_up(Keys.CONTROL)\</span><br><span class="line">    .key_down(Keys.CONTROL,dom1).send_keys(&apos;v&apos;).key_up(Keys.CONTROL).perform()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>引入路径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from selenium.webdriver.common.keys import Keys</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-初识selenium"><span class="toc-text">1 初识selenium</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-WebDriver"><span class="toc-text">1.1 WebDriver</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-启动chrome"><span class="toc-text">1.2 启动chrome</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-xpath与CSS-selector"><span class="toc-text">2 xpath与CSS selector</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#xpath"><span class="toc-text">xpath</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#css-selector"><span class="toc-text">css selector</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选择xpath还是css-selector"><span class="toc-text">选择xpath还是css selector?</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-十八种定位方法"><span class="toc-text">3 十八种定位方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-八种单数定位方式"><span class="toc-text">3.1 八种单数定位方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-八种复数定位"><span class="toc-text">3.2 八种复数定位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-另外两种定位方式"><span class="toc-text">3.3 另外两种定位方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-selunium常用api"><span class="toc-text">4 selunium常用api</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-浏览器操作"><span class="toc-text">4.1 浏览器操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-tag指针"><span class="toc-text">4.2 tag指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-iframe"><span class="toc-text">4.3 iframe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-alert"><span class="toc-text">4.4 alert</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-select"><span class="toc-text">4.5 select</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-鼠标悬浮"><span class="toc-text">4.6 鼠标悬浮</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-拖拽"><span class="toc-text">4.7 拖拽</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-8-三种等待方式"><span class="toc-text">4.8 三种等待方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-9-ActionChains的其他用法"><span class="toc-text">4.9 ActionChains的其他用法</span></a></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: happyryan</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">http://yoursite.com/passages/2019-04-18-WebdriverBasics/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/UI自动化/"><i class="fa fa-tags"></i>UI自动化</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">博客推荐</h5>
+        
+          <span class="site-footer-item">
+            <a href="http://ruanyifeng.com/" target="_blank">阮一峰的个人网站</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">系列教程</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/passages/2019-03-03-theme-ad-docs-zh/" target="_blank">Theme Art Design 中文文档</a>
+          </span>
+        
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+        
+          <div>
+            <img src="/images/wechat.jpg" alt="WeChat">
+            
+              <p>WeChat</p>
+            
+          </div>
+        
+          <div>
+            <img src="/images/alipay.jpg" alt="AliPay">
+            
+              <p>AliPay</p>
+            
+          </div>
+        
+      </div>
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-04-08-WebDriverDownload/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    <a href="javascript:void(0);" id="site-reward">
+      <i class="fa fa-thumbs-up"></i>
+    </a>
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+  
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>

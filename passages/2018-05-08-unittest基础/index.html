@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="happyryan">
+  
+  
+  <title>2018-05-08-unittest基础 | 虫虫研究室</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="UI自动化,UI自动化,python,">
+  
+
+  
+  <meta name="description" content="python unittest基础">
+
+  
+
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":false,"count":false},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-07",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "happyryan",
+    share: {"twitter":false,"facebook":false,"weibo":false,"qq":false,"wechat":false},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">虫虫研究室</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 记录与分享</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-05-08
+    </span>
+    
+      <span>
+        | <a href="/categories/UI自动化/"><i class="fa fa-bookmark"></i>UI自动化</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    2018-05-08-unittest基础
+  </h1>
+  
+  <article class="passage-article">
+    <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>测试套件 多个用例放在一起 testsuit<br>运行用例 testrunner<br>查找测试用例 testloader</p>
+<p>函数名必须test开头，unittest才会替你运行<br>用例运行顺序根据函数的首字母排序</p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyTest</span><span class="params">(unittest.TestCase)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_reg</span><span class="params">(self)</span>:</span> <span class="comment">#必须以test开头</span></span><br><span class="line">        print(<span class="string">'reg'</span>)</span><br><span class="line">        self.assertEqual(<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_login</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'login'</span>)</span><br><span class="line">        self.assertEqual(<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_buy</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'buy'</span>)</span><br><span class="line">        self.assertEqual(<span class="number">4</span>,<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">unittest.main() <span class="comment">#运行当前python文件里面的所有以test开头的方法</span></span><br></pre></td></tr></table></figure>
+<h3 id="使用HTMLTestRunner生成测试报告"><a href="#使用HTMLTestRunner生成测试报告" class="headerlink" title="使用HTMLTestRunner生成测试报告"></a>使用HTMLTestRunner生成测试报告</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"><span class="keyword">import</span> HTMLTestRunner</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyTest</span><span class="params">(unittest.TestCase)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_reg</span><span class="params">(self)</span>:</span> <span class="comment">#必须以test开头</span></span><br><span class="line">        print(<span class="string">'reg'</span>)</span><br><span class="line">        self.assertEqual(<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_login</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'login'</span>)</span><br><span class="line">        self.assertEqual(<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_buy</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'buy'</span>)</span><br><span class="line">        self.assertEqual(<span class="number">4</span>,<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">f = open(<span class="string">'a.html'</span>, <span class="string">'wb'</span>)</span><br><span class="line">runner = HTMLTestRunner.HTMLTestRunner(f, title = <span class="string">'zltestsample'</span>, description=<span class="string">'XXX接口测试'</span>)</span><br><span class="line">suit = unittest.makeSuite(MyTest) <span class="comment">#变成一个测试集合</span></span><br><span class="line">runner.run(suit)</span><br></pre></td></tr></table></figure>
+<h3 id="使用BeautifulReport生成测试报告"><a href="#使用BeautifulReport生成测试报告" class="headerlink" title="使用BeautifulReport生成测试报告"></a>使用BeautifulReport生成测试报告</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"><span class="keyword">import</span> BeautifulReport</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyTest</span><span class="params">(unittest.TestCase)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_reg</span><span class="params">(self)</span>:</span> <span class="comment">#必须以test开头</span></span><br><span class="line">        <span class="string">'''注册'''</span> <span class="comment">#加注释后，BeautifulReport就会生成用例描述</span></span><br><span class="line">        print(<span class="string">'reg'</span>)</span><br><span class="line">        self.assertEqual(<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_login</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">'''登录'''</span></span><br><span class="line">        print(<span class="string">'login'</span>)</span><br><span class="line">        self.assertEqual(<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_buy</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">'''购买'''</span></span><br><span class="line">        print(<span class="string">'buy'</span>)</span><br><span class="line">        self.assertEqual(<span class="number">4</span>,<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">suit = unittest.makeSuite(MyTest) <span class="comment">#变成一个测试集合</span></span><br><span class="line">report = BeautifulReport.BeautifulReport(suit)</span><br><span class="line">report.report(filename=<span class="string">'zl接口测试.html'</span>, description=<span class="string">'接口测试报告'</span>)</span><br></pre></td></tr></table></figure>
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本概念"><span class="toc-text">基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#实例"><span class="toc-text">实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用HTMLTestRunner生成测试报告"><span class="toc-text">使用HTMLTestRunner生成测试报告</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用BeautifulReport生成测试报告"><span class="toc-text">使用BeautifulReport生成测试报告</span></a></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: happyryan</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">http://yoursite.com/passages/2018-05-08-unittest基础/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/UI自动化/"><i class="fa fa-tags"></i>UI自动化</a>
+     
+      <a href="/tags/python/"><i class="fa fa-tags"></i>python</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">博客推荐</h5>
+        
+          <span class="site-footer-item">
+            <a href="http://ruanyifeng.com/" target="_blank">阮一峰的个人网站</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">系列教程</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/passages/2019-03-03-theme-ad-docs-zh/" target="_blank">Theme Art Design 中文文档</a>
+          </span>
+        
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+        
+          <div>
+            <img src="/images/wechat.jpg" alt="WeChat">
+            
+              <p>WeChat</p>
+            
+          </div>
+        
+          <div>
+            <img src="/images/alipay.jpg" alt="AliPay">
+            
+              <p>AliPay</p>
+            
+          </div>
+        
+      </div>
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-04-18-WebdriverQA/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    <a href="javascript:void(0);" id="site-reward">
+      <i class="fa fa-thumbs-up"></i>
+    </a>
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+  
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
